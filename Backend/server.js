@@ -210,7 +210,7 @@ app.get("/trends", (req, res) => {
         return res.json(cachedData);
     }
 
-    const command = `python trends.py "${cityA}" "${cityB}"`;
+    const command = `python3 trends.py "${cityA}" "${cityB}"`;
 
     exec(command, (error, stdout, stderr) => {
         if (error) {
