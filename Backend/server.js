@@ -115,7 +115,7 @@ app.use(express.urlencoded({ limit: "100mb", extended: true }));
 
 app.use(bodyParser.json());
 const corsOptions = {
-    origin: "https://wanderwise-frontend-ny9t.onrender.com", // frontend origin
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000', // frontend origin
     credentials: true,
   };
   
