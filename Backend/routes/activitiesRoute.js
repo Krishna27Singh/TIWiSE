@@ -5,8 +5,8 @@ const router = express.Router();
 
 // Set up environment variables for API keys
 const apiKey = process.env.GEOAPIFY_API_KEY;
-const amadeusApiKey = process.env.AMADEUS_API_KEY_1;
-const amadeusApiSecret = process.env.AMADEUS_API_SECRET_1;
+const amadeusApiKey = process.env.AMADEUS_API_KEY;
+const amadeusApiSecret = process.env.AMADEUS_API_SECRET;
 
 // Predefined categories to categorize activities
 const predefinedCategories = {
