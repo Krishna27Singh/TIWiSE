@@ -18,6 +18,23 @@ df = pd.read_csv(url)
 df.drop(columns=['name', 'email', 'phone-number', 'credit_card'], inplace=True)
 df.drop(columns=['reservation_status', 'reservation_status_date'], inplace=True)
 
+# ✅ Handle missing values
+print("🔍 Checking for missing values before preprocessing...")
+print(df.isnull().sum())  # Print columns with missing values
+
+# Fill numeric NaNs with median and categorical NaNs with 'unknown'
+df.fillna(df.median(numeric_only=True), inplace=True)  # Numeric NaNs
+df.fillna('unknown', inplace=True)  # Categorical NaNs
+
+# Check again for any remaining NaNs (should be zero)
+if df.isnull().sum().sum() > 0:
+    print("⚠️ Warning: Missing values detected after initial preprocessing!")
+    print(df.isnull().sum())
+    print("⚠️ Dropping rows with remaining NaN values...")
+    df.dropna(inplace=True)  # Drop rows with any remaining NaN values
+
+print("✅ Missing value handling complete.")
+
 # ✅ Encode categorical columns
 categorical_cols = df.select_dtypes(include=['object']).columns
 label_encoders = {}
