@@ -247,17 +247,7 @@ function ExpenseTracker() {
             </div>
               </div>
 
-              {/* Row 3: Expenses Chart full width */}
-              <div className="mb-6 bg-green-100 p-4 rounded-t-xl">
-                <div className="bg-green-100 p-4 rounded-t-xl">
-                  <h2 className="text-3xl font-bold text-teal-900 text-center font-[Poppins]">
-                    💰 Track Your Personal Trip Expenses
-                  </h2>
-                </div>
-                <div className="bg-white p-4 rounded-b-xl shadow h-[450px]">
-                  <ExpensesChart expenses={expenses} />
-                </div>
-              </div>
+              
 
 
         {/* <ExpenseTrackerForm addExpenses={addExpenses}/> */}
