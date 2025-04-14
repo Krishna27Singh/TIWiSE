@@ -33,11 +33,6 @@ const indianCities = [
 ];
 
 const Dashboard = () => {
-
-  const handleClick = () => {
-    window.location.href = 'https://flightpricepredictor-qwuasxxqhrbmg8tcskk29j.streamlit.app/';
-  };
-
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [summarySection, setSummarySection] = useState('Most Rated Hotels');
@@ -82,10 +77,10 @@ const Dashboard = () => {
         {/* Main Content Area */}
         <div className="flex flex-col lg:flex-row gap-6 mb-8">
           
-        
+          {/* Left Column  */}
          
 
-          {/* Left Column - Graph Section */}
+          {/* Right Column - Graph Section */}
           <div className="w-full lg:w-1/2" id="newsletter-capture-target">
             <section className="bg-white rounded-xl shadow p-6 h-full">
               <select
@@ -106,10 +101,28 @@ const Dashboard = () => {
           </div>
 
           <div  className="w-full lg:w-1/2">
+          <section className="bg-white rounded-xl shadow p-6 h-full">
            <div className="w-full flex flex-col items-center mt-2 ">
-           <HotelRiskChart  />
+         <HotelRiskChart/>
           </div>
+          <div className="mt-6 p-6 bg-teal-50 rounded-lg w-full text-center">
+          <div className="mt-6 p-6 bg-teal-50 rounded-lg w-full h-60 flex flex-col justify-center items-center text-center overflow-hidden">
+            <div className="space-y-4">
+              <h2 className="text-teal-600 text-xl font-semibold">
+                ✈️ "The best time to buy a flight was yesterday. The second-best time is now — if you know the data."
+              </h2>
+              <h2 className="text-teal-600 text-xl font-semibold">
+                🏨 "Predicting risk is not about fear — it's about foresight."
+              </h2>
+            </div>
           </div>
+
+        </div>
+
+
+          </section>
+          </div>
+
         </div>
 
 <div>
