@@ -3,32 +3,46 @@ import axios from 'axios';
 import { Line } from 'react-chartjs-2';
 
 const HotelRiskChart = () => {
-  const [chartData, setChartData] = useState(null);
-
-  useEffect(() => {
-    // Fetch risk data for 'City Hotel' by default
-    axios.post('http://localhost:5001/predict', { hotel: 'City Hotel' })
-      .then(res => {
-        setChartData({
-          labels: res.data.x,
-          datasets: [{
-            label: 'Cancellation Risk - City Hotel',
-            data: res.data.y,
-            borderColor: 'rgb(75, 192, 192)',
-            tension: 0.1,
-            fill: false
-          }]
-        });
-      })
-      .catch(console.error);
-  }, []);
-
+ 
   return (
-    <div style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
-      <h2>📊 Predicting Risk of Booking Cancellation</h2>
-      {chartData ? <Line data={chartData} /> : <p>Loading chart...</p>}
-    </div>
-  );
+    <div style={{ marginTop: '3rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+    <a
+      href="https://flightpricepredictor-qwuasxxqhrbmg8tcskk29j.streamlit.app/"
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{
+        padding: '0.6rem 1.4rem',
+        backgroundColor: 'teal',
+        color: 'white',
+        borderRadius: '10px',
+        textDecoration: 'none',
+        fontSize: '0.95rem',
+        boxShadow: '0px 4px 12px rgba(0, 128, 128, 0.3)',
+        transition: 'all 0.2s ease-in-out'
+      }}
+    >
+      Do Flight Prices Prediction Here
+    </a>
+  
+    <a
+      href="https://hoteltiwise-7hnhjvmtxnh7ep3nff4fbg.streamlit.app/"
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{
+        padding: '0.6rem 1.4rem',
+        backgroundColor: 'teal',
+        color: 'white',
+        borderRadius: '10px',
+        textDecoration: 'none',
+        fontSize: '0.95rem',
+        boxShadow: '0px 4px 12px rgba(0, 128, 128, 0.3)',
+        transition: 'all 0.2s ease-in-out'
+      }}
+    >
+      Explore Hotel Booking Risk Prediction
+    </a>
+  </div>
+    );
 };
 
 export default HotelRiskChart;
