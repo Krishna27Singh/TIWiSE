@@ -7,6 +7,7 @@ import Chart from "./charts/Charts";
 import POITrends from "./charts/POITrends";
 import WeatherChart from "./charts/WeatherChart";
 import MapActivities from "./charts/MapActivities";
+import HotelRiskChart from "./charts/HotelRiskChart";
 
 const indianCities = [
   "Mumbai",
@@ -32,6 +33,11 @@ const indianCities = [
 ];
 
 const Dashboard = () => {
+
+  const handleClick = () => {
+    window.location.href = 'https://flightpricepredictor-qwuasxxqhrbmg8tcskk29j.streamlit.app/';
+  };
+
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [summarySection, setSummarySection] = useState('Most Rated Hotels');
@@ -76,10 +82,10 @@ const Dashboard = () => {
         {/* Main Content Area */}
         <div className="flex flex-col lg:flex-row gap-6 mb-8">
           
-          {/* Left Column  */}
+        
          
 
-          {/* Right Column - Graph Section */}
+          {/* Left Column - Graph Section */}
           <div className="w-full lg:w-1/2" id="newsletter-capture-target">
             <section className="bg-white rounded-xl shadow p-6 h-full">
               <select
@@ -97,6 +103,12 @@ const Dashboard = () => {
                 <Chart type={summarySection} />
               </div>
             </section>
+          </div>
+
+          <div  className="w-full lg:w-1/2">
+           <div className="w-full flex flex-col items-center mt-2 ">
+           <HotelRiskChart  />
+          </div>
           </div>
         </div>
 
