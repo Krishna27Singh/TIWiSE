@@ -17,6 +17,9 @@ def fetch_trends(cityA, cityB, max_retries=5):
 
     for attempt in range(max_retries):
         try:
+            # Add random delay before making the request
+            time.sleep(random.uniform(1, 3))
+
             # Build the payload
             pytrends.build_payload(keywords, cat=0, timeframe="today 3-m", geo="IN", gprop="")
 
@@ -52,6 +55,8 @@ def fetch_trends(cityA, cityB, max_retries=5):
             else:
                 print(json.dumps({"error": str(e)}))
                 return
+
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
