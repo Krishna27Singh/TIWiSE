@@ -219,7 +219,7 @@ app.get("/trends", (req, res) => {
             console.error("❌ Python Script Error:", stderr || error.message);
 
             // Fallback data: Mock data for 3 months (90 days)
-            const fallbackData = generateSmoothedMockData(cityA, cityB);
+            const fallbackData = generateMockDataWithPeak(cityA, cityB);
 
             trendCache.set(cacheKey, fallbackData); // Cache fallback data
             return res.json(fallbackData);
@@ -235,7 +235,7 @@ app.get("/trends", (req, res) => {
             console.error("⚠️ JSON Parsing Error:", parseError.message);
 
             // Fallback data: Mock data for 3 months (90 days)
-            const fallbackData = generateSmoothedMockData(cityA, cityB);
+            const fallbackData = generateMockDataWithPeak(cityA, cityB);
 
             trendCache.set(cacheKey, fallbackData); // Cache fallback data
             res.json(fallbackData);
@@ -243,8 +243,8 @@ app.get("/trends", (req, res) => {
     });
 });
 
-// Generate smoothed mock data for 3 months (90 days)
-function generateSmoothedMockData(cityA, cityB) {
+// Generate mock data for 3 months with one city peaking at 100
+function generateMockDataWithPeak(cityA, cityB) {
     const dates = [];
     const cityAData = [];
     const cityBData = [];
@@ -271,11 +271,32 @@ function generateSmoothedMockData(cityA, cityB) {
         cityBData.unshift(Math.round(cityBValue));
     }
 
+    // Scale one dataset to peak at 100 (relative scale)
+    const maxCityA = Math.max(...cityAData);
+    const maxCityB = Math.max(...cityBData);
+
+    // Ensure one city always peaks at 100
+    if (maxCityA >= maxCityB) {
+        scaleToPeak(cityAData, 100);
+    } else {
+        scaleToPeak(cityBData, 100);
+    }
+
     return {
         dates,
         cityA: cityAData,
         cityB: cityBData,
     };
+}
+
+// Scale dataset to make its maximum value equal to the peak value
+function scaleToPeak(data, peakValue) {
+    const maxValue = Math.max(...data);
+    const scaleFactor = peakValue / maxValue;
+
+    for (let i = 0; i < data.length; i++) {
+        data[i] = Math.round(data[i] * scaleFactor);
+    }
 }
 const rooms = {};
 
