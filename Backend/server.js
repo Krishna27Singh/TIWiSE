@@ -219,7 +219,7 @@ app.get("/trends", (req, res) => {
             console.error("❌ Python Script Error:", stderr || error.message);
 
             // Fallback data: Mock data for 3 months (90 days)
-            const fallbackData = generateMockData(cityA, cityB);
+            const fallbackData = generateSmoothedMockData(cityA, cityB);
 
             trendCache.set(cacheKey, fallbackData); // Cache fallback data
             return res.json(fallbackData);
@@ -235,7 +235,7 @@ app.get("/trends", (req, res) => {
             console.error("⚠️ JSON Parsing Error:", parseError.message);
 
             // Fallback data: Mock data for 3 months (90 days)
-            const fallbackData = generateMockData(cityA, cityB);
+            const fallbackData = generateSmoothedMockData(cityA, cityB);
 
             trendCache.set(cacheKey, fallbackData); // Cache fallback data
             res.json(fallbackData);
@@ -243,20 +243,32 @@ app.get("/trends", (req, res) => {
     });
 });
 
-// Generate mock data for 3 months (90 days)
-function generateMockData(cityA, cityB) {
+// Generate smoothed mock data for 3 months (90 days)
+function generateSmoothedMockData(cityA, cityB) {
     const dates = [];
     const cityAData = [];
     const cityBData = [];
     const today = new Date();
+
+    let cityAValue = 50; // Start value for cityA
+    let cityBValue = 50; // Start value for cityB
 
     for (let i = 0; i < 90; i++) {
         const date = new Date(today);
         date.setDate(today.getDate() - i);
 
         dates.unshift(date.toISOString().split("T")[0]); // Add date in YYYY-MM-DD format
-        cityAData.unshift(Math.floor(Math.random() * 100)); // Random data for cityA
-        cityBData.unshift(Math.floor(Math.random() * 100)); // Random data for cityB
+
+        // Smooth the fluctuations with smaller random variations
+        cityAValue += Math.random() * 10 - 5; // Vary between -5 and 5
+        cityBValue += Math.random() * 10 - 5; // Vary between -5 and 5
+
+        // Ensure values remain within a reasonable range (0-100)
+        cityAValue = Math.max(0, Math.min(100, cityAValue));
+        cityBValue = Math.max(0, Math.min(100, cityBValue));
+
+        cityAData.unshift(Math.round(cityAValue));
+        cityBData.unshift(Math.round(cityBValue));
     }
 
     return {
