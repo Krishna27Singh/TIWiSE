@@ -27,7 +27,7 @@ def fetch_trends(cityA, cityB, max_retries=5):
             trends_data = pytrends.interest_over_time()
 
             if trends_data.empty:
-                print(json.dumps({"error": "No trend data found. Try different keywords."}))
+                print(json.dumps({"error": "No trend data found. Try different keywords."}), flush=True)
                 return
 
             # Extract relevant columns
@@ -48,19 +48,22 @@ def fetch_trends(cityA, cityB, max_retries=5):
             return  # Success, exit function
 
         except Exception as e:
-            if "429" in str(e) and attempt < max_retries - 1:
-                print(f"Rate limit hit. Retrying in {delay} seconds...")
-                time.sleep(delay)
-                delay *= 2  # Exponential backoff
+            if "429" in str(e):  # Rate limit error
+                if attempt < max_retries - 1:
+                    print(f"Rate limit hit. Retrying in {delay} seconds...", flush=True)
+                    time.sleep(delay)
+                    delay *= 2  # Exponential backoff
+                else:
+                    print(json.dumps({"error": "Rate limit exceeded. Please try again later."}), flush=True)
+                    return
             else:
-                print(json.dumps({"error": str(e)}))
+                print(json.dumps({"error": str(e)}), flush=True)
                 return
-
 
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print(json.dumps({"error": "Usage: python trends.py <CityA> <CityB>"}))
+        print(json.dumps({"error": "Usage: python trends.py <CityA> <CityB>"}), flush=True)
     else:
         cityA, cityB = sys.argv[1], sys.argv[2]
         fetch_trends(cityA, cityB)
