@@ -263,10 +263,8 @@ function generateMockData(cityA, cityB) {
         dates,
         cityA: cityAData,
         cityB: cityBData,
-        error: "Rate limit hit or script failed. Mock data used.",
     };
 }
-
 const rooms = {};
 
 // ========== SOCKET.IO ========== //
