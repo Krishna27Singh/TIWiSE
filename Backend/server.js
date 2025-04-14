@@ -202,6 +202,7 @@ app.get("/trends", (req, res) => {
         return res.status(400).json({ error: "Please provide two cities." });
     }
 
+    // Create a cache key
     const cacheKey = `${cityA.toLowerCase()}_${cityB.toLowerCase()}`;
     const cachedData = trendCache.get(cacheKey);
 
@@ -212,37 +213,59 @@ app.get("/trends", (req, res) => {
 
     const command = `python3 trends.py "${cityA}" "${cityB}"`;
 
+    // Execute Python script
     exec(command, (error, stdout, stderr) => {
         if (error) {
-            console.error("❌ Google Trends API Error:", stderr || error.message);
+            console.error("❌ Python Script Error:", stderr || error.message);
 
-            // Fallback to mock data
-            const fallbackData = {
-                dates: ["2025-01-01", "2025-01-02", "2025-01-03"],
-                cityA: [50, 60, 70],
-                cityB: [55, 65, 75],
-            };
+            // Fallback data: Mock data for 3 months (90 days)
+            const fallbackData = generateMockData(cityA, cityB);
+
+            trendCache.set(cacheKey, fallbackData); // Cache fallback data
             return res.json(fallbackData);
         }
 
         try {
+            // Parse and cache response
             const data = JSON.parse(stdout);
-            trendCache.set(cacheKey, data); // Save result to cache
+            trendCache.set(cacheKey, data);
             console.log("📡 New data fetched & cached");
             res.json(data);
         } catch (parseError) {
             console.error("⚠️ JSON Parsing Error:", parseError.message);
-            
-            // Fallback to mock data
-            const fallbackData = {
-                dates: ["2025-01-01", "2025-01-02", "2025-01-03"],
-                cityA: [50, 60, 70],
-                cityB: [55, 65, 75],
-            };
+
+            // Fallback data: Mock data for 3 months (90 days)
+            const fallbackData = generateMockData(cityA, cityB);
+
+            trendCache.set(cacheKey, fallbackData); // Cache fallback data
             res.json(fallbackData);
         }
     });
 });
+
+// Generate mock data for 3 months (90 days)
+function generateMockData(cityA, cityB) {
+    const dates = [];
+    const cityAData = [];
+    const cityBData = [];
+    const today = new Date();
+
+    for (let i = 0; i < 90; i++) {
+        const date = new Date(today);
+        date.setDate(today.getDate() - i);
+
+        dates.unshift(date.toISOString().split("T")[0]); // Add date in YYYY-MM-DD format
+        cityAData.unshift(Math.floor(Math.random() * 100)); // Random data for cityA
+        cityBData.unshift(Math.floor(Math.random() * 100)); // Random data for cityB
+    }
+
+    return {
+        dates,
+        cityA: cityAData,
+        cityB: cityBData,
+        error: "Rate limit hit or script failed. Mock data used.",
+    };
+}
 
 const rooms = {};
 
